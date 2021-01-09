@@ -60,14 +60,17 @@ void mergesort( time meuVetorDeTimes[ ], int inicio, int fim ) {
     }
 }
 
+void lerVetorDeTimes( time meuVetorDeTimes[ ], int tamanho ) {
+    for ( int i = 0; i < tamanho; i++ ) {
+        cin >> meuVetorDeTimes[i].identificador >> meuVetorDeTimes[i].nome >> meuVetorDeTimes[i].gols_marcados;
+    }
+}
 
 int main() {
     int tamanho;
     cin >> tamanho;
     time meuVetorDeTimes[tamanho];
-    for ( int i = 0; i < tamanho; i++ ) {
-        cin >> meuVetorDeTimes[i].identificador >> meuVetorDeTimes[i].nome >> meuVetorDeTimes[i].gols_marcados;
-    }
+    lerVetorDeTimes( meuVetorDeTimes, tamanho );
     int identificador;
     cin >> identificador;
     mergesort( meuVetorDeTimes, 0, tamanho - 1 );
