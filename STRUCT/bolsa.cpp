@@ -40,7 +40,10 @@ void ranking( bolsa minhaBolsa[ ] ) {
     selectionSort( minhaBolsa );
     cout << "RANKING: " << endl;
     for ( unsigned i = 0; i < QUANTIDADE_DE_COMPANHIAS; i++ ) {
-        cout << minhaBolsa[i].companhia << " R$ " << minhaBolsa[i].valor << endl;
+        cout << "Posicao " << i + 1 << endl
+            << "\tCompanhia: " << minhaBolsa[i].companhia << endl
+            << "\tValor: R$ " << minhaBolsa[i].valor << endl
+            << "\tPorcentagem: " << minhaBolsa[i].porcentagem << endl << endl;
     }
 }
 
