@@ -1,5 +1,23 @@
 {
     "files.associations": {
         "ostream": "cpp"
-    }
+    },
+    "cSpell.words": [
+        "identificacao",
+        "quantidade",
+        "registros",
+        "atualizacao",
+        "identificacao",
+        "insercao",
+        "opcao",
+        "operacao",
+        "padrao",
+        "pivo",
+        "pos",
+        "quantidade",
+        "registro",
+        "registros",
+        "remocao",
+        "ultimo",
+    ]
 }
