@@ -31,12 +31,17 @@ istream& operator>>( istream& leitura, funcionario& meu_funcionario ) {
     return leitura;
 }
 
+void saidaLeitura() {
+    cout << "Digite identificacao (int) | salario (float) | nome (char[20])\n";
+}
+
 ostream& operator<<( ostream& saida, funcionario& meu_funcionario ) {
     saida << "Identificacao: " << meu_funcionario.identificacao << endl;
     saida << "Nome: " << meu_funcionario.nome << endl;;
     saida << "Salario: " << meu_funcionario.salario << endl;
     return saida;
 }
+
 
 ifstream arquivo_input;
 fstream meu_arquivo;
@@ -85,6 +90,23 @@ void escreve_funcionario( int pos ) {
     }
 }
 
+funcionario le_funcionario( int pos ) {
+    meu_arquivo.open( NOME_ARQUIVO_PRINCIPAL.c_str(), ios::binary | ios::in );
+    funcionario meu_funcionario_leitura;
+    if ( meu_arquivo ) {
+        meu_arquivo.seekg( pos, ios::beg );
+        meu_arquivo.read( ( char* )( &meu_funcionario_leitura ), sizeof( funcionario ) );
+        meu_arquivo.close();
+        return meu_funcionario_leitura;
+    }
+    else {
+        meu_arquivo.close();
+        throw std::runtime_error( "Lendo funcionario: Arquivo não existe!" );
+
+    }
+
+}
+
 void insere() {
     le_cabecalho();
     long int pos_escrita = sizeof( cabecalho ) + ( sizeof( funcionario ) * meu_cabecalho.quantidade_registros );
@@ -95,17 +117,18 @@ void insere() {
 
 // Função retorna struct funcionario e a posicao dele no arquivo
 funcionario buscaPorNome( string nome, int& pos ) {
+    funcionario meu_funcionario_busca;
     meu_arquivo.open( NOME_ARQUIVO_PRINCIPAL.c_str(), ios::binary | ios::in );
     meu_arquivo.seekg( 0, ios::end );
     int i = 0;
     meu_arquivo.seekg( 0, ios::beg );
     meu_arquivo.read( ( char* )&meu_cabecalho, sizeof( cabecalho ) );
     while ( i < meu_cabecalho.quantidade_registros ) {
-        meu_arquivo.read( ( char* )&meu_funcionario, sizeof( funcionario ) );
-        if ( strcmp( nome.c_str(), meu_funcionario.nome ) == 0 ) {
+        meu_arquivo.read( ( char* )&meu_funcionario_busca, sizeof( funcionario ) );
+        if ( strcmp( nome.c_str(), meu_funcionario_busca.nome ) == 0 ) {
             meu_arquivo.close();
             pos = i;
-            return meu_funcionario;
+            return meu_funcionario_busca;
         }
         i++;
     }
@@ -113,17 +136,18 @@ funcionario buscaPorNome( string nome, int& pos ) {
     throw runtime_error( "Busca: Nome nao encontrado!" );
 }
 funcionario buscaPorId( int id, int& pos ) {
+    funcionario meu_funcionario_busca;
     meu_arquivo.open( NOME_ARQUIVO_PRINCIPAL.c_str(), ios::binary | ios::in );
     meu_arquivo.seekg( 0, ios::end );
     int i = 0;
     meu_arquivo.seekg( 0, ios::beg );
     meu_arquivo.read( ( char* )&meu_cabecalho, sizeof( cabecalho ) );
     while ( i < meu_cabecalho.quantidade_registros ) {
-        meu_arquivo.read( ( char* )&meu_funcionario, sizeof( funcionario ) );
-        if ( meu_funcionario.identificacao == id ) {
+        meu_arquivo.read( ( char* )&meu_funcionario_busca, sizeof( funcionario ) );
+        if ( meu_funcionario_busca.identificacao == id ) {
             meu_arquivo.close();
             pos = i;
-            return meu_funcionario;
+            return meu_funcionario_busca;
         }
         i++;
     }
@@ -131,17 +155,18 @@ funcionario buscaPorId( int id, int& pos ) {
     throw runtime_error( "Busca: Identificacao nao encontrado!" );
 }
 funcionario buscaPorSalario( float salario, int& pos ) {
+    funcionario meu_funcionario_busca;
     meu_arquivo.open( NOME_ARQUIVO_PRINCIPAL.c_str(), ios::binary | ios::in );
     meu_arquivo.seekg( 0, ios::end );
     int i = 0;
     meu_arquivo.seekg( 0, ios::beg );
     meu_arquivo.read( ( char* )&meu_cabecalho, sizeof( cabecalho ) );
     while ( i < meu_cabecalho.quantidade_registros ) {
-        meu_arquivo.read( ( char* )&meu_funcionario, sizeof( funcionario ) );
-        if ( meu_funcionario.salario == salario ) {
+        meu_arquivo.read( ( char* )&meu_funcionario_busca, sizeof( funcionario ) );
+        if ( meu_funcionario_busca.salario == salario ) {
             meu_arquivo.close();
             pos = i;
-            return meu_funcionario;
+            return meu_funcionario_busca;
         }
         i++;
     }
@@ -279,6 +304,7 @@ void atualizacao() {
 
             case 'A':
             case 'a':
+                saidaLeitura();
                 cin >> meu_funcionario;
                 escreve_funcionario( posicao_do_funcionario );
                 cout << "Funcionario atualizado com sucesso!\n" << meu_funcionario;
@@ -292,8 +318,52 @@ void atualizacao() {
     } while ( comando != 'f' );
 }
 
+void remocao() {
+    int pos, pos_aux, cont;
+    char comando;
+    cout << "\n ______________________________________________________________________________________"
+        << "\n|                                       REMOCAO                                        |"
+        << "\n|Como voce quer buscar o funcionario?                                                  |";
+    meu_funcionario = busca( cont );
+    do {
+        cout << "Funcionario:\n" << meu_funcionario << "Voce deseja excluir esse funcionario?\nS - sim  | N - nao | O - Outro\nDigite a opcao: ";
+        cin >> comando;
+        switch ( comando ) {
+            case 'S':
+            case 's':
+                comando = 's';
+                break;
+
+            case 'O':
+            case 'o':
+                meu_funcionario = busca( cont );
+                break;
+
+            case 'N':
+            case 'n':
+                throw runtime_error( "Remocao: Operacao cancelada!" );
+                break;
+
+            default:
+                cout << "Comando invalido\n";
+                break;
+        }
+    } while ( comando != 's' );
+
+    while ( cont < meu_cabecalho.quantidade_registros ) {
+        pos = ( sizeof( funcionario ) * cont ) + sizeof( cabecalho );
+        pos_aux = pos + sizeof( funcionario );
+        meu_funcionario = le_funcionario( pos_aux );
+        escreve_funcionario( pos );
+        cont++;
+    }
+    meu_cabecalho.quantidade_registros--;
+    atualiza_cabecalho();
+    cout << "Funcionario removido com sucesso!\n";
+
+}
+
 ofstream abri_arquivo;
-funcionario buscado;
 
 void menu() {
     char operacao;
@@ -313,17 +383,18 @@ void menu() {
                 case 'I':
                 case 'i':
                     cout << "Insercao:\n";
+                    saidaLeitura();
                     cin >> meu_funcionario;
                     insere();
                     break;
                 case 'B':
                 case 'b':
-                    buscado = busca( pos );
-                    cout << "Funcionario:\n" << buscado;
+                    meu_funcionario = busca( pos );
+                    cout << "Funcionario:\n" << meu_funcionario;
                     break;
                 case 'R':
                 case 'r':
-                    cout << "Remocao:\n";
+                    remocao();
                     break;
                 case 'U':
                 case 'u':
