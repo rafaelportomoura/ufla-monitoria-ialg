@@ -326,9 +326,9 @@ void remocao() {
         << "\n|Como voce quer buscar o funcionario?                                                  |";
     meu_funcionario = busca( cont );
     do {
-        cout << "______________________________________________________________________________________"
+        cout << "______________________________________________________________________________________\n"
             << "Funcionario:\n" << meu_funcionario
-            << "______________________________________________________________________________________"
+            << "______________________________________________________________________________________\n"
             << "Voce deseja excluir esse funcionario?\nS - sim  | N - nao | O - Outro\nDigite a opcao: ";
         cin >> comando;
         switch ( comando ) {
