@@ -45,9 +45,6 @@
         "typeinfo": "cpp"
     },
     "cSpell.words": [
-        "identificacao",
-        "quantidade",
-        "registros",
         "atualizacao",
         "identificacao",
         "insercao",
@@ -56,10 +53,12 @@
         "padrao",
         "pivo",
         "pos",
+        "posicoes",
         "quantidade",
         "registro",
         "registros",
         "remocao",
-        "ultimo",
+        "respectivas",
+        "ultimo"
     ]
 }
