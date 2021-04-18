@@ -72,7 +72,11 @@ Baixe o MinGW acessando [SourceForge][link-mingw], clique depois em Download, es
 **Passo 12:** Clique em novo, e em seguida coloque o diretório dos binários que foram instalados com o MinGW (geralmente em C:\MinGW\bin). Em seguida clique em Ok. 
 ![Caminho](img/minGW/11.caminho.png)
 
-**Passo 13:** Para testar se deu certo, abra o Prompt de Comando e digite “g++”.  
+**Passo 13:** Para testar se deu certo, abra o Prompt de Comando, pressione Windows + R para abrir a caixa "Executar". Digite "cmd" e clique em "OK". 
+![Prompt](img/minGW/12.a.png)
+
+
+**Passo 14:** Após abrir o prompt de comando digite “g++”.  
 ![G++](img/minGW/12.prompt.png)
 
 
